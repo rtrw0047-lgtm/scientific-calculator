@@ -1,0 +1,81 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Scientific Calculator</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0a0a1a;color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center}
+.ob{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:1000;display:flex;justify-content:center;align-items:center}.ob.hide{display:none}
+.oc{background:#141428;border-radius:20px;padding:40px;max-width:500px;width:90%;text-align:center}
+.oc h2{color:#a855f7;font-size:28px;margin-bottom:8px}.oc .sub{color:#888;font-size:14px}
+.stps{margin:25px 0;text-align:left;display:flex;flex-direction:column;gap:18px}
+.st{display:flex;gap:14px;align-items:flex-start}.st .n{width:32px;height:32px;border-radius:50%;background:#a855f7;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.st h4{font-size:14px;margin-bottom:2px}.st p{font-size:12px;color:#888;line-height:1.5}
+.oc button{padding:14px 40px;border:none;border-radius:10px;background:#a855f7;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+.oc .sk{color:#555;font-size:12px;cursor:pointer;margin-top:12px;display:inline-block}
+.app{display:none;max-width:380px;width:100%;padding:20px}.app.show{display:block}
+h1{text-align:center;margin-bottom:10px}h1 span{background:linear-gradient(90deg,#a855f7,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.display{background:#1a1a3e;border-radius:14px;padding:20px;margin-bottom:10px;text-align:right}
+.display .expr{color:#888;font-size:14px;min-height:20px;font-family:monospace}
+.display .result{color:#fff;font-size:36px;font-weight:200;font-family:monospace;word-break:break-all}
+.btns-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
+.btns-grid button{padding:14px 8px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;transition:.1s}
+.btns-grid button:active{transform:scale(0.93)}
+.btns-grid .fn{background:#1a2a3e;color:#a855f7;font-size:12px}
+.btns-grid .fn:hover{background:#2a3a4e}
+.btns-grid .num{background:#1a1a3e;color:#fff}
+.btns-grid .num:hover{background:#2a2a4e}
+.btns-grid .op{background:#a855f7;color:#fff;font-weight:600}
+.btns-grid .op:hover{background:#9645e7}
+.btns-grid .eq{background:#00b894;color:#fff;font-weight:700;font-size:18px}
+.btns-grid .eq:hover{background:#00a884}
+.btns-grid .clear{background:#ff6b6b;color:#fff}
+.btns-grid .clear:hover{background:#e55a5a}
+.history{background:#1a1a3e;border-radius:12px;padding:12px;text-align:left;max-height:120px;overflow-y:auto}
+.history h3{color:#666;font-size:11px;margin-bottom:6px}
+.history .item{padding:4px 0;font-size:12px;font-family:monospace;color:#aaa;border-bottom:1px solid #0a0a1a;cursor:pointer}
+.history .item:hover{color:#a855f7}
+.history .item:last-child{border:none}
+</style></head><body>
+<div class="ob" id="ob"><div class="oc">
+<h2>Scientific Calculator</h2><p class="sub">Advanced math with trig, log, and powers</p>
+<div class="stps">
+<div class="st"><div class="n">1</div><div><h4>Enter Numbers</h4><p>Click the number buttons or type on your keyboard. Use operators (+, -, *, /) between numbers.</p></div></div>
+<div class="st"><div class="n">2</div><div><h4>Use Scientific Functions</h4><p>Click buttons like sin, cos, tan, log, ln, sqrt, x^y for advanced calculations.</p></div></div>
+<div class="st"><div class="n">3</div><div><h4>See History</h4><p>Past calculations appear below. Click any to load it back. Press = to evaluate.</p></div></div>
+</div>
+<button onclick="start()">Open Calculator</button>
+<div class="sk" onclick="start()">Skip</div>
+</div></div>
+<div class="app" id="app">
+<h1><span>Scientific Calculator</span></h1>
+<div class="display"><div class="expr" id="expr"></div><div class="result" id="result">0</div></div>
+<div class="btns-grid">
+<button class="fn" onclick="fn('sin')">sin</button><button class="fn" onclick="fn('cos')">cos</button><button class="fn" onclick="fn('tan')">tan</button><button class="fn" onclick="fn('log')">log</button><button class="fn" onclick="fn('ln')">ln</button>
+<button class="fn" onclick="fn('sqrt')">sqrt</button><button class="fn" onclick="fn('pow')">x^y</button><button class="fn" onclick="fn('pi')">&#960;</button><button class="fn" onclick="fn('e')">e</button><button class="fn" onclick="fn('abs')">|x|</button>
+<button class="clear" onclick="clearAll()">AC</button><button class="fn" onclick="backspace()">&#9003;</button><button class="fn" onclick="input('%')">%</button><button class="fn" onclick="input('(')">(</button><button class="fn" onclick="input(')')">)</button>
+<button class="num" onclick="input('7')">7</button><button class="num" onclick="input('8')">8</button><button class="num" onclick="input('9')">9</button><button class="op" onclick="input('/')">&#247;</button><button class="fn" onclick="fn('pow2')">x&#178;</button>
+<button class="num" onclick="input('4')">4</button><button class="num" onclick="input('5')">5</button><button class="num" onclick="input('6')">6</button><button class="op" onclick="input('*')">&#215;</button><button class="fn" onclick="fn('inv')">1/x</button>
+<button class="num" onclick="input('1')">1</button><button class="num" onclick="input('2')">2</button><button class="num" onclick="input('3')">3</button><button class="op" onclick="input('-')">&#8722;</button><button class="eq" rowspan="2" onclick="calc()" style="grid-row:span 2">=</button>
+<button class="num" onclick="input('0')" style="grid-column:span 2">0</button><button class="num" onclick="input('.')">.</button><button class="op" onclick="input('+')">+</button>
+</div>
+<div class="history"><h3>HISTORY</h3><div id="hist"></div></div></div>
+<script>
+var expr='',history=[];
+function start(){document.getElementById('ob').classList.add('hide');document.getElementById('app').classList.add('show');localStorage.setItem('sc_seen','1')}
+if(localStorage.getItem('sc_seen')){document.getElementById('ob').classList.add('hide');document.getElementById('app').classList.add('show')}
+function input(v){expr+=v;document.getElementById('expr').textContent=expr}
+function clearAll(){expr='';document.getElementById('expr').textContent='';document.getElementById('result').textContent='0'}
+function backspace(){expr=expr.slice(0,-1);document.getElementById('expr').textContent=expr}
+function fn(name){
+if(name==='pi')expr+=Math.PI.toFixed(8);
+else if(name==='e')expr+=Math.E.toFixed(8);
+else if(name==='pow2')expr+='**2';
+else if(name==='pow')expr+='**';
+else if(name==='inv')expr='1/('+expr+')';
+else expr=name+'('+expr+')';
+document.getElementById('expr').textContent=expr}
+function calc(){
+try{var safe=expr.replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(').replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(').replace(/sqrt\(/g,'Math.sqrt(').replace(/abs\(/g,'Math.abs(');
+var result=eval(safe);var display=Number.isFinite(result)?parseFloat(result.toFixed(10)):result;
+history.unshift(expr+' = '+display);if(history.length>8)history.pop();
+document.getElementById('result').textContent=display;document.getElementById('hist').innerHTML=history.map(function(h,i){return '<div class="item" onclick="loadHist('+i+')">'+h+'</div>'}).join('');
+expr=''+display}catch(e){document.getElementById('result').textContent='Error';expr=''}}
+function loadHist(i){expr=history[i].split(' = ')[0];document.getElementById('expr').textContent=expr}
+document.addEventListener('keydown',function(e){if('0123456789.+-*/%()'.includes(e.key))input(e.key);else if(e.key==='Enter'){e.preventDefault();calc()}else if(e.key==='Backspace')backspace();else if(e.key==='Escape')clearAll()});
+</script></body></html>
